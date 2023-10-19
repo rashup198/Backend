@@ -1,15 +1,27 @@
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
-    postId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post',
-        required: true
-    },
-    body: {
+    titel:{
         type: String,
         required: true,
         trim: true,
-        maxlength: 200
+        maxlength: 100
     }
+    ,comment: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 100
+    },
+    created_at: {
+        type: Date,
+        default: Date.now
+    },
+    updated_at: {
+        type: Date,
+        default: Date.now
+    }
+    
 });
+
+module.exports = mongoose.model('Comment', commentSchema);
