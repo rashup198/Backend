@@ -3,10 +3,12 @@ const router = express.Router();
 
 // Import the controllers
 const { createPost } = require("../controlles/createpost");
-const { getPost } = require("../controlles/getPost");
+const { getpost } = require("../controlles/getPost");
+const {getpostbyid} = require("../controlles/getPost")
 
 // Define the routes
 router.post('/createpost', createPost);
-router.get("/getPost", getPost)
+router.get("/getPost", getpost)
+router.get("/getPost/:id", getpostbyid)
 
 module.exports = router;

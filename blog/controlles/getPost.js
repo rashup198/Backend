@@ -20,4 +20,20 @@ exports.getpost = async(req,res)=>{
     }
 }
 
+//get post by id
+
+exports.getpostbyid = async(req,res)=>{
+    try {
+        const id = req.params.id
+        const todos = await post.findById(id)
+        res.status(200).json({
+            success:true,
+            data:todos,
+            message:"post fetched successfully"
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
