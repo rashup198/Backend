@@ -1,26 +1,19 @@
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
-    titel:{
+    post:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+        required: true
+    },user:{
         type: String,
-        required: true,
-        trim: true,
-        maxlength: 100
-    }
-    ,comment: {
+        required: true
+    },
+    body:{
         type: String,
-        required: true,
-        trim: true,
-        maxlength: 100
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now
+        required: true
     }
+
     
 });
 
