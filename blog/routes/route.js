@@ -10,14 +10,16 @@ const {getpostbyid} = require("../controlles/getPost")
 const {createComment} = require("../controlles/creatcomment") 
 const {getComment} = require("../controlles/getcomment")
 const {getcommentbyid} = require("../controlles/getcomment")
-const {likes} = require("../controlles/likeControler")
+const {likePost} = require("../controlles/likeControler")
+const {unlikePost} = require("../controlles/likeControler")
 
 
 // Define the routes
 router.post('/createpost', createPost);
 router.get("/getPost", getpost)
 router.get("/getPost/:id", getpostbyid)
-router.get("/like",likes)
+router.post("/like",likePost)
+router.delete("/unlike",unlikePost)
 
 
 //define the routes for the comment

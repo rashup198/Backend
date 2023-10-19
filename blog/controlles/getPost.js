@@ -35,5 +35,3 @@ exports.getpostbyid = async(req,res)=>{
         console.log(error);
     }
 }
-
-
