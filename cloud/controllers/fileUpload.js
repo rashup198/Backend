@@ -33,7 +33,8 @@ function isFileTypeSupported(fileType, supportedTypes) {
 async function uploadFileToCloudinary(file,folder){
     const options= {folder}
     console.log("temp file path",file.tempFilePath);
-    return await cloudinary.uploader.upload(file,tempFilePath,options)
+    options.resource_type="auto";
+    return await cloudinary.uploader.upload(file.tempFilePath,options)
 }
 
 // image upload to cloudinary
@@ -42,7 +43,7 @@ exports.imageUpload= async(req,res)=>{
         //data fetch
         const{name,tags,email}=req.body;
         const file=req.files.imageFile;
-        console.log(file);
+        console.log("the file is ->",file);
 
         // validation for image
         const supportedTypes = ['png', 'jpg', 'jpeg'];
@@ -75,5 +76,51 @@ exports.imageUpload= async(req,res)=>{
         
     } catch (error) {
         console.log(error);
+    }
+}
+
+// video upload to cloudinary
+
+exports.videoUpload= async(req,res)=>{
+    try {
+        //data fetch
+        const {name,tags,email}=req.body;
+        const file=req.files.videoFile;
+        console.log("the file is ->",file);
+
+        // validation for video
+        const supportedTypes = ['mp4', 'mov', 'avi'];
+        const fileType = file.name.split('.')[1];
+        if(!isFileTypeSupported(fileType, supportedTypes)) {
+            return res.status(400).json({
+                success: false,
+                msg: 'File type not supported'
+            });
+        }
+
+        //upload video to cloudinary
+
+        console.log("uploading file to cloudinary");
+        const response= await uploadFileToCloudinary(file,"rashu");
+        console.log(response);
+
+        // save entry to db
+        const fileData= await File.create({
+            name,
+            tags,
+            email,
+            videoUrl:response.secure_url
+        });
+        res.status(200).json({
+            success:true,
+            msg:"Video uploaded successfully",
+            data:fileData
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success:false,
+            msg:"Internal server error"
+        })
     }
 }
