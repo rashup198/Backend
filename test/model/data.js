@@ -20,6 +20,7 @@ dataSchema.post('save',async function(doc){
 
     try {
         console.log(doc);
+        // create a transporter which will connect to the smtp server
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             auth:{
@@ -28,7 +29,7 @@ dataSchema.post('save',async function(doc){
             }
         })
         let info = await transporter.sendMail({
-            from: "Dummy",
+            from: "Dummy ",
             to: doc.email,
             subject: "Dummy",
             html: `<h1>hello</h1> <h2>your details are saved</h2>
