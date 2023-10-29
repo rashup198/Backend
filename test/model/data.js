@@ -12,12 +12,35 @@ const dataSchema = new mongoose.Schema({
         required:true
     },
     phone:{
-        type:Number,
-        required:true,
+        type:Number
     },
 })
 
+dataSchema.post('save',async function(doc){
 
+    try {
+        console.log(doc);
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            auth:{
+                user:process.env.MAIL_USER,
+                pass:process.env.MAIl_PASS
+            }
+        })
+        let info = await transporter.sendMail({
+            from: "Dummy",
+            to: doc.email,
+            subject: "Dummy",
+            html: `<h1>hello</h1> <h2>your details are saved</h2>
+            <p>name:${doc.name}</p>
+            <p>email:${doc.email}</p>
+            <p>phone:${doc.phone}</p>
+            `
+        })  
+        console.log(info);
+    } catch (error) {
+       console.log(error); 
+    }
+})
 
-
-const Data = mongoose.model('Data',dataSchema);
+module.exports= mongoose.model('data',dataSchema);

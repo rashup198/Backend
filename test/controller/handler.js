@@ -1,24 +1,22 @@
-const data = require("../model/data")
+const data = require("../model/data");
 
-exports.details= async(req,res)=>{
+exports.createDetails = async(req, res) => {
     try {
-        const {name,email,phone} = req.body;
-        const response = await data.create({name,email,phone});
-
+        // extract name,email,phone from req.body
+        const { name,email} = req.body;
+        // create a new data object
+        const response = await data.create({name,email})
+        // send the response
         res.status(201).json({
-            status:"success",
-            data:{
-                name:response.name,
-                email:response.email,
-                phone:response.phone
-            }
-        })
-
+            status: "success",
+            data:response,
+            message: "Details created successfully."
+        });
     } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            status:"fail",
-            message:error
-        })
+        console.error(error);
+        res.status(500).json({
+            status: "fail",
+            message: "An error occurred while creating the details."
+        });
     }
-}
+};
