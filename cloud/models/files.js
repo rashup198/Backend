@@ -34,9 +34,9 @@ fileSchema.post("save",async function(doc){
         })
         //send mail
         let info = await transporter.sendMail({
-            from:"'Priyanshu' <linnie.reichel4@ethereal.email>",
-            to:"rashup198@gmail.com",
-            subject:"File uploaded successfully",
+            from:"'Priyanshu' <rashup198@gmail.com>",
+            to:doc.email,
+            subject:`Hello ${doc.name}! File uploaded successfully`,
             html:`<h1>hello ${doc.name}</h1> <h1>File uploaded successfully</h1> view your file here <a href=${doc.imageUrl}>click here</a>`
         })
         console.log(info);
