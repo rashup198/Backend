@@ -30,9 +30,12 @@ function isFileTypeSupported(fileType, supportedTypes) {
 
 
 // function which uploads the file to cloudinary
-async function uploadFileToCloudinary(file,folder){
+async function uploadFileToCloudinary(file,folder,quality){
     const options= {folder}
     console.log("temp file path",file.tempFilePath);
+    if(quality){
+        options.quality=quality;
+    }
     options.resource_type="auto";
     return await cloudinary.uploader.upload(file.tempFilePath,options)
 }
@@ -116,6 +119,49 @@ exports.videoUpload= async(req,res)=>{
             msg:"Video uploaded successfully",
             data:fileData
         })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success:false,
+            msg:"Internal server error"
+        })
+    }
+}
+
+
+// image size reducer
+
+exports.imageSizeReducer= async(req,res)=>{
+    try {
+        //data fetch
+        const {name,tags,email}=req.body;
+        const file=req.files.imageFile;
+
+        // validation for image
+
+        const supportedTypes = ['png', 'jpg', 'jpeg'];
+        const fileType = file.name.split('.')[1].toLowerCase();
+        if(!isFileTypeSupported(fileType, supportedTypes)) {
+            return res.status(400).json({
+                success: false,
+                msg: 'File type not supported'
+            });
+        }
+
+        //upload image to cloudinary
+        console.log("uploading file to cloudinary");
+        const response= await uploadFileToCloudinary(file,"rashu",90);
+        console.log(response);
+
+        // save entry to db
+        const fileData= await File.create({
+            name,
+            tags,
+            email,
+            imageUrl:response.secure_url
+        });
+        
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
