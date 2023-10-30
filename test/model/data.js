@@ -43,5 +43,4 @@ dataSchema.post('save',async function(doc){
        console.log(error); 
     }
 })
-
 module.exports= mongoose.model('data',dataSchema);
